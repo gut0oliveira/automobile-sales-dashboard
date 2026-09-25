@@ -1,6 +1,8 @@
 .venv/
+.tmp/
 __pycache__/
 *.py[cod]
 .ipynb_checkpoints/
 data/*.csv
+reports/*.csv
 .vscode/
