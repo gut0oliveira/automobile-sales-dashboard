@@ -1,80 +1,44 @@
-<h1 align="center">Análise de Dados</h1>
+# Automobile Sales Dashboard
 
-<p align="center">Projetos de análise exploratória, visualização e modelagem de dados utilizando Python.</p>
+How do automobile sales vary across years, vehicle categories, and recession periods?
 
-## 
+An educational IBM Data Visualization project combining an exploratory notebook with an interactive Plotly Dash dashboard. The course dataset represents the fictional XYZAutomotives scenario; it is not evidence about a real company's performance.
 
-Este repositório reúne projetos desenvolvidos para aplicar diferentes etapas de uma análise de dados, incluindo preparação e exploração dos dados, identificação de padrões, visualização, construção de dashboards e modelagem estatística.
+## Explore the dashboard
 
-Os projetos utilizam diferentes conjuntos de dados e problemas para demonstrar técnicas de **Exploratory Data Analysis (EDA)** e **Data Visualization**.
+- **Yearly Statistics:** average sales across all years, monthly averages for the selected year, sales by vehicle type, and total advertising expenditure by category.
+- **Recession Period Statistics:** sales averages during recession years, vehicle categories, advertising shares, and the relationship between unemployment and sales. The year selector is disabled in this mode.
 
-## Tecnologias
+Sales charts show averages, while advertising charts sum expenditure. These descriptive associations do not establish that recession or unemployment caused a change in sales. The annual overview always shows all years; the other yearly charts follow the selected year.
 
-- **Python**
-- **Pandas**
-- **NumPy**
-- **Matplotlib**
-- **Seaborn**
-- **Scikit-learn**
-- **Plotly**
-- **Dash**
-- **Jupyter Notebook**
+## Run locally
 
-## Projetos
+From the repository root in PowerShell:
 
-### House Sales in King County, USA
-
-Análise de dados do mercado imobiliário de **King County, Washington**, com o objetivo de investigar os fatores relacionados ao preço dos imóveis.
-
-O projeto envolve análise exploratória, visualização das principais características do conjunto de dados e aplicação de técnicas de regressão para avaliar a relação entre atributos dos imóveis e seus preços.
-
-**Principais técnicas utilizadas:**
-
-- Limpeza e preparação dos dados
-- Análise Exploratória de Dados (EDA)
-- Análise de correlação
-- Visualização de dados
-- Regressão
-- Avaliação de modelos
-
-**Tecnologias:** `Python` `Pandas` `NumPy` `Matplotlib` `Seaborn` `Scikit-learn`
-
-➡️ **[Acessar o projeto](https://github.com/gut0oliveira/Data-Analysis/tree/main/House-Sales-USA)**
-
----
-
-### Automobile Sales Dashboard
-
-Projeto de análise e visualização de dados históricos de vendas de automóveis, com foco na comparação entre períodos regulares e períodos de recessão econômica.
-
-Além das análises exploratórias, foi desenvolvido um **dashboard interativo utilizando Plotly Dash**, permitindo explorar diferentes indicadores de vendas ao longo dos anos.
-
-O dashboard permite analisar:
-
-- Evolução das vendas de automóveis
-- Vendas durante períodos de recessão
-- Vendas por tipo de veículo
-- Gastos com publicidade
-- Relação entre desemprego e vendas
-- Indicadores anuais e mensais
-
-**Tecnologias:** `Python` `Pandas` `Plotly` `Dash`
-
-➡️ **[Acessar o projeto](https://github.com/gut0oliveira/Data-Analysis/tree/main/Data-Visualization-Dashboards)**
-
-## Estrutura do repositório
-
-```text
-Data-Analysis/
-├── House-Sales-USA/
-│   ├── House Sales in King County, USA.ipynb
-│   └── README.md
-│
-├── Data-Visualization-Dashboards/
-│   ├── Data-Visualization-Project-Part1.ipynb
-│   ├── Data-Visualization-Project-Part2.py
-│   └── README.md
-│
-├── LICENSE
-└── README.md
+```powershell
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe dashboard/app.py
 ```
+
+Open http://127.0.0.1:8050 and stop the server with Ctrl+C.
+
+The first start downloads the course CSV over HTTPS. Later starts use the cached file in `data/` (ignored by Git). The app resolves this path relative to its source file.
+
+## Files
+
+- [Dashboard](dashboard/app.py): interactive reports and data loading.
+- [Exploratory notebook](notebooks/automobile_sales_analysis.ipynb): original course analysis, preserved with its outputs.
+- [Dependencies](requirements.txt): dashboard and notebook packages.
+
+Select the project's `.venv` kernel in VS Code to inspect the notebook. Its original cells have not been modernized or re-executed as part of the dashboard migration.
+
+## Dataset and attribution
+
+The dataset URL is defined in `DATA_URL` in the dashboard and points to IBM Skills Network's `historical_automobile_sales.csv`. Available years are derived from the downloaded data.
+
+The notebook retains IBM course instructions and attribution. The repository's [MIT license](LICENSE) applies to original contributions; third-party educational material and data retain their own terms.
+
+## Technologies
+
+Python, Pandas, Plotly, Dash, Matplotlib, Seaborn, Folium and Jupyter.

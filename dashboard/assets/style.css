@@ -1,0 +1,4 @@
+body { margin: 0 auto; padding: 24px; max-width: 1400px; font-family: Arial, sans-serif; background: #f5f7fa; }
+.chart-item { flex-wrap: wrap; gap: 16px; margin-top: 16px; }
+.chart-item > div { flex: 1 1 450px; min-width: 0; background: white; }
+@media (max-width: 600px) { body { padding: 12px; } .chart-item > div { flex-basis: 100%; } }

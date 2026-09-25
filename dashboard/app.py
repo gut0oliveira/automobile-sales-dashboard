@@ -1,3 +1,5 @@
+from pathlib import Path
+import requests
 import dash
 from dash import dcc, html
 from dash.dependencies import Input, Output
@@ -5,13 +7,20 @@ import pandas as pd
 import plotly.express as px
 
 # Load the data using pandas
-data = pd.read_csv('https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DV0101EN-SkillsNetwork/Data%20Files/historical_automobile_sales.csv')
+DATA_URL = 'https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-DV0101EN-SkillsNetwork/Data%20Files/historical_automobile_sales.csv'
+DATA_PATH = Path(__file__).resolve().parents[1] / 'data' / 'historical_automobile_sales.csv'
+if not DATA_PATH.exists():
+    response = requests.get(DATA_URL, timeout=60)
+    response.raise_for_status()
+    DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
+    DATA_PATH.write_bytes(response.content)
+data = pd.read_csv(DATA_PATH)
 
 # Initialize the Dash app
 app = dash.Dash(__name__)
 
 # List of years
-year_list = [i for i in range(1980, 2024)]
+year_list = sorted(data['Year'].unique().tolist())
 
 # Set the layout of the app
 app.layout = html.Div([
@@ -25,6 +34,7 @@ app.layout = html.Div([
                          {'label': 'Recession Period Statistics', 'value': 'Recession Period Statistics'}
                      ],
                      placeholder='Select a report type',
+                     value='Yearly Statistics', clearable=False,
                      style={'textAlign': 'center', 'padding': 3, 'fontSize': 20}
         ),
         
@@ -32,10 +42,11 @@ app.layout = html.Div([
         dcc.Dropdown(id='select-year', 
                      options=[{'label': year, 'value': year} for year in year_list],
                      placeholder='Select a year',
+                     value=year_list[-1], clearable=False,
                      style={'textAlign': 'center', 'padding': 3, 'fontSize': 20}
         ),
         
-        html.Div(id='output-container', className='chart-grid', style={'display': 'flex'}),
+        html.Div(id='output-container', className='chart-grid'),
     ])
 ])
 
@@ -95,7 +106,7 @@ def update_output_container(statistics, input_year):
                           y='Automobile_Sales',
                           color='Vehicle_Type',
                           labels={'unemployment_rate': 'Unemployment Rate', 'Automobile_Sales': 'Average Automobile Sales'},
-                          title='Effect of Unemployment Rate on Vehicle Type and Sales')
+                          title='Unemployment Rate and Average Sales During Recessions')
         )
 
         return [
@@ -107,12 +118,12 @@ def update_output_container(statistics, input_year):
         yearly_data = data[data['Year'] == input_year]
 
         # Plot 1: Yearly Automobile sales using line chart for the whole period
-        yas = yearly_data.groupby('Year')['Automobile_Sales'].mean().reset_index()
+        yas = data.groupby('Year')['Automobile_Sales'].mean().reset_index()
         Y_chart1 = dcc.Graph(
             figure=px.line(yas,
                            x='Year',
                            y='Automobile_Sales',
-                           title='Yearly Automobile Sales')
+                           title='Average Annual Automobile Sales - All Years')
         )
 
         # Plot 2: Total Monthly Automobile sales using line chart
@@ -121,7 +132,7 @@ def update_output_container(statistics, input_year):
             figure=px.line(mas,
                            x='Month',
                            y='Automobile_Sales',
-                           title='Total Monthly Automobile Sales')
+                           title='Average Monthly Automobile Sales')
         )
 
         # Plot 3: Bar chart for average number of vehicles sold during the given year
@@ -152,4 +163,4 @@ def update_output_container(statistics, input_year):
 
 # Run the Dash app
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=False, host='127.0.0.1', port=8050)
